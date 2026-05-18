@@ -1057,6 +1057,13 @@ async def test_get_session_with_config(session_service):
   events = session.events
   assert len(events) == num_test_events
 
+  # num_recent_events=0 should return no events.
+  config = GetSessionConfig(num_recent_events=0)
+  session = await session_service.get_session(
+      app_name=app_name, user_id=user_id, session_id=session.id, config=config
+  )
+  assert len(session.events) == 0
+
   # Only expect the most recent 3 events.
   num_recent_events = 3
   config = GetSessionConfig(num_recent_events=num_recent_events)
