@@ -61,3 +61,10 @@ def test_create_gcs_eval_managers_from_uri_success(
 def test_create_gcs_eval_managers_from_uri_failure():
   with pytest.raises(ValueError):
     evals.create_gcs_eval_managers_from_uri('unsupported-uri')
+
+
+def test_evals_module_does_not_import_gcs_at_module_level():
+  """GCS classes should be lazy-imported, not at module level."""
+  module_globals = vars(evals)
+  assert 'GcsEvalSetResultsManager' not in module_globals
+  assert 'GcsEvalSetsManager' not in module_globals
